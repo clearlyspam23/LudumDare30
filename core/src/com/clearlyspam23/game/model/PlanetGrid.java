@@ -34,7 +34,7 @@ public class PlanetGrid {
 	private List<Planet> planets = new ArrayList<Planet>();
 	private Map<Planet, PlanetNode> grid = new HashMap<Planet, PlanetNode>(); 
 	
-	public void addPlanet(Planet planet){
+	void addPlanet(Planet planet){
 		grid.put(planet, new PlanetNode(planet));
 		planets.add(planet);
 	}
@@ -114,6 +114,13 @@ public class PlanetGrid {
 
 	public List<Planet> getPlanets() {
 		return planets;
+	}
+	
+	public boolean isDiscovered(Planet planet){
+		PlanetNode node = grid.get(planet);
+		if(node==null)
+			return false;
+		return !node.connections.isEmpty();
 	}
 
 }

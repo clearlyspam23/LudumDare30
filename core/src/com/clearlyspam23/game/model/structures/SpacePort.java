@@ -28,7 +28,7 @@ public class SpacePort extends Structure {
 	public void performEffect(GameData data, Planet planet) {
 		if(data.tick%rate==0&&hasTasks(planet)){
 			if(fireWaiting&&!waitingShips.isEmpty()){
-				data.activeShips.add(waitingShips.remove(0));
+				data.addShip(waitingShips.remove(0));
 			}
 			else{
 				int count = 0;
@@ -41,9 +41,9 @@ public class SpacePort extends Structure {
 						count++;
 						continue;
 					}
-					List<Planet> between = data.planets.planetsBetween(planet, agreement.planet);
-					Ship ship = new Ship(agreement.resource, capacity, between, data);
-					data.activeShips.add(ship);
+					List<Planet> between = data.getPlanetGrid().planetsBetween(planet, agreement.planet);
+					Ship ship = new Ship(agreement.resource, capacity, between, data, planet);
+					data.addShip(ship);
 					break;
 				}
 			}
@@ -53,6 +53,10 @@ public class SpacePort extends Structure {
 	
 	private boolean hasTasks(Planet planet){
 		return !planet.getActiveTrades().isEmpty()||!waitingShips.isEmpty();
+	}
+	
+	public void addWaitingShip(Ship ship){
+		waitingShips.add(ship);
 	}
 
 	@Override

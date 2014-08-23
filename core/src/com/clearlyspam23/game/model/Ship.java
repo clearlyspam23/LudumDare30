@@ -10,33 +10,51 @@ public class Ship {
 	public final int amount;
 	public final List<Planet> path;
 	
-	public int distance;
+	public int distanceLeft;
+	public int totalDistance;
 	
-	public Ship(Resource resource, int amount, List<Planet> path, GameData data){
+	public final Planet startingPlanet;
+	public final Planet destinationPlanet;
+	
+	private Planet currentPlanet;
+	
+	public Ship(Resource resource, int amount, List<Planet> path, GameData data, Planet planet){
 		this.resource = resource;
 		this.amount = amount;
 		this.path = path;
 		Planet current = path.remove(0);
-		data.logInfo("Ship leaves "+ current.getName());
-		distance = data.planets.getDistanceToPlanet(current, path.get(0));
+		currentPlanet = startingPlanet = planet;
+		destinationPlanet = path.get(path.size()-1);
+		data.logInfo("Ship leaves "+ current.getName() + " with " + amount + " " + resource.name + " headed for " + destinationPlanet.getName());
+		totalDistance = distanceLeft = data.getPlanetGrid().getDistanceToPlanet(current, path.get(0));
 	}
 	
 	public void onTick(GameData data){
-		distance-=1;
-		if(distance<=0){
-			Planet current = path.remove(0);
-			data.logger.log(data.tick, "Ship arrives at "+ current.getName(), MessageType.info);
+		distanceLeft-=1;
+		if(distanceLeft<=0){
+			currentPlanet = path.remove(0);
+			data.logger.log(data.tick, "Ship arrives at "+ currentPlanet.getName(), MessageType.info);
 			if(path.isEmpty()){
-				int value = (int) (current.getResourceBuyingValue(resource)*amount);
-				current.addResourceAmount(resource, amount);
-				data.amountOfMoney+=(value);
-				data.logInfo("" + amount + " " + resource.name + " sold to " + current.getName() + " for " + value);
+				int value = (int) (currentPlanet.getResourceBuyingValue(resource)*amount);
+				currentPlanet.addResourceAmount(resource, amount);
+				data.changeAmountOfMoney(value, destinationPlanet);
+//				data.setAmountOfMoney(data.getAmountOfMoney() + (value));
+				data.logInfo("" + amount + " " + resource.name + " sold to " + currentPlanet.getName() + " for " + value);
 			}
 			else{
-				distance = data.planets.getDistanceToPlanet(current, path.get(0));
+				currentPlanet.getSpacePort().addWaitingShip(this);
+				totalDistance = distanceLeft = data.getPlanetGrid().getDistanceToPlanet(currentPlanet, path.get(0));
 			}
 			data.removeList.add(this);
 		}
+	}
+	
+	public Planet getNextVisit(){
+		return path.get(0);
+	}
+	
+	public Planet getCurrentPlanet(){
+		return currentPlanet;
 	}
 
 }
