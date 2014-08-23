@@ -17,7 +17,7 @@ public class Planet {
 	
 	private int basePrice;
 	
-	private List<Structure> purchasedStructures = new ArrayList<Structure>();
+	private List<Structure> structures = new ArrayList<Structure>();
 	
 	public Planet(String name, ValueTable table, float buying, float selling){
 		this.name = name;
@@ -63,12 +63,12 @@ public class Planet {
 		this.basePrice = buyingPrice;
 	}
 
-	public List<Structure> getPurchasedStructures() {
-		return purchasedStructures;
+	public List<Structure> getStructures() {
+		return structures;
 	}
 
 	public void addStructure(Structure structure){
-		purchasedStructures.add(structure);
+		structures.add(structure);
 	}
 
 	public ValueTable getValueTable() {
@@ -89,6 +89,14 @@ public class Planet {
 
 	public void setSellingFavor(float sellingFavor) {
 		this.sellingFavor = sellingFavor;
+	}
+	
+	public float getResourceBuyingValue(Resource resource){
+		return buyingFavor*valueTable.getValueOf(resource);
+	}
+	
+	public float getResourceSellingValue(Resource resource){
+		return sellingFavor*valueTable.getValueOf(resource);
 	}
 
 }

@@ -5,5 +5,7 @@ public class GameData {
 	public int tick;
 	
 	public int amountOfMoney;
+	
+	public Logger logger;
 
 }
