@@ -28,6 +28,7 @@ public class Ship {
 			data.logger.log(data.tick, "Ship arrives at "+ current.getName(), MessageType.info);
 			if(path.isEmpty()){
 				int value = (int) (current.getResourceBuyingValue(resource)*amount);
+				current.addResourceAmount(resource, amount);
 				data.amountOfMoney+=(value);
 				data.logInfo("" + amount + " " + resource.name + " sold to " + current.getName() + " for " + value);
 			}
