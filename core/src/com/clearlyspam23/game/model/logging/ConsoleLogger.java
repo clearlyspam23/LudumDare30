@@ -5,8 +5,8 @@ import com.clearlyspam23.game.model.Logger;
 public class ConsoleLogger implements Logger {
 
 	@Override
-	public void log(String message) {
-		System.out.println(message);
+	public void log(int tick, String message, MessageType type) {
+		System.out.println(type.name() + " - " + tick + ": " + message);
 	}
 
 }

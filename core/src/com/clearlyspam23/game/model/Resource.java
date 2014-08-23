@@ -6,24 +6,13 @@ public class Resource {
 		unrefined, refined, manufactured, artisan
 	}
 	
-	private String name;
+	public final String name;
 	
-	private ResourceType tier;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
+	public final ResourceType type;
+	
+	public Resource(String name, ResourceType type){
 		this.name = name;
-	}
-
-	public ResourceType getTier() {
-		return tier;
-	}
-
-	public void setTier(ResourceType tier) {
-		this.tier = tier;
+		this.type = type;
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.clearlyspam23.game.model.structures.SpacePort;
+
 public class Planet {
 	
 	private final String name;
@@ -18,12 +20,18 @@ public class Planet {
 	private int basePrice;
 	
 	private List<Structure> structures = new ArrayList<Structure>();
+	private List<Planet> connectedPlanets = new ArrayList<Planet>();
+	private List<TradeAgreement> activeTrades = new ArrayList<TradeAgreement>();
 	
-	public Planet(String name, ValueTable table, float buying, float selling){
+	private SpacePort spacePort;
+	
+	public Planet(String name, ValueTable table, float buying, float selling, SpacePort port){
 		this.name = name;
 		this.valueTable = table;
 		buyingFavor = buying;
 		sellingFavor = selling;
+		spacePort = port;
+		structures.add(spacePort);
 	}
 
 	public String getName() {
@@ -97,6 +105,36 @@ public class Planet {
 	
 	public float getResourceSellingValue(Resource resource){
 		return sellingFavor*valueTable.getValueOf(resource);
+	}
+	
+	public void onTick(GameData data){
+		for(Structure structure : structures){
+			structure.performEffect(data, this);
+		}
+	}
+	
+	public List<Planet> getConnectedPlanets(){
+		return connectedPlanets;
+	}
+	
+	public void makeThatConnection(Planet planet){
+		connectedPlanets.add(planet);
+	}
+
+	public List<TradeAgreement> getActiveTrades() {
+		return activeTrades;
+	}
+
+	public void addTradeAgreement(TradeAgreement agreement) {
+		activeTrades.add(agreement);
+	}
+	
+	public void removeTradeAgreement(TradeAgreement agreement){
+		activeTrades.remove(agreement);
+	}
+	
+	public SpacePort getSpacePort(){
+		return spacePort;
 	}
 
 }

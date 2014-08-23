@@ -1,7 +1,7 @@
 package com.clearlyspam23.game.model.structures;
 
-import com.clearlyspam23.game.model.Planet;
 import com.clearlyspam23.game.model.GameData;
+import com.clearlyspam23.game.model.Planet;
 import com.clearlyspam23.game.model.Resource;
 import com.clearlyspam23.game.model.Structure;
 
@@ -19,13 +19,15 @@ public class Mine extends Structure{
 
 	@Override
 	public void performEffect(GameData data, Planet planet) {
-		if(data.tick%rate==0)
+		if(data.tick%rate==0){
 			planet.addResourceAmount(resource, increment);
+			data.logInfo("" + increment + " " + resource.name + " added to " + planet.getName() + " from " + getName());
+		}
 	}
 
 	@Override
 	public String getName() {
-		return resource.getName() + " Mine";
+		return resource.name + " Mine";
 	}
 
 	public Resource getResource() {
