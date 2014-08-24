@@ -19,11 +19,11 @@ import com.clearlyspam23.game.model.logging.ConsoleLogger;
 import com.clearlyspam23.game.model.structures.Mine;
 import com.clearlyspam23.game.model.structures.Refinery;
 import com.clearlyspam23.game.model.structures.SpacePort;
-import com.clearlyspam23.game.view.UniverseStage;
+import com.clearlyspam23.game.view.GameStage;
 
 public class LD30SpaceGame extends ApplicationAdapter {
 	
-	UniverseStage stage;
+	GameStage stage;
 //	SpriteBatch batch;
 	
 	
@@ -52,12 +52,14 @@ public class LD30SpaceGame extends ApplicationAdapter {
 		planet1.addTradeAgreement(new TradeAgreement(iron, planet3));
 		planet2.addTradeAgreement(new TradeAgreement(steel, planet1));
 		
-		stage = new UniverseStage(new ScalingViewport(Scaling.fill, 637.5f, 500f), data);
+		stage = new GameStage(new ScalingViewport(Scaling.fill, 637.5f, 500f), data);
 	    Gdx.input.setInputProcessor(stage);
 	    
 	    stage.addPlanet(planet1, Color.GREEN, 0, 0, 50);
 	    stage.addPlanet(planet2, Color.RED, 200, 200, 50);
 	    stage.addPlanet(planet3, Color.ORANGE, 500, 500, 200);
+	    
+//	    stage.getOverlay().showPlanetOverlay(planet1);
 	    
 	}
 

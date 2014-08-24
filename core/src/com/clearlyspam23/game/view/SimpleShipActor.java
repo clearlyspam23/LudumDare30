@@ -15,7 +15,7 @@ public class SimpleShipActor extends Image {
 	public SimpleShipActor(TextureRegion base, float startX, float startY, float endX, float endY, Ship ship, GameData data){
 		setDrawable(new TextureRegionDrawable(base));
 		this.setPosition(startX, startY);
-		addAction(Actions.moveTo(endX, endY, ship.totalDistance*UniverseStage.TICK_RATE));
+		addAction(Actions.moveTo(endX, endY, ship.totalDistance*GameStage.TICK_RATE));
 		this.data = data;
 		this.ship = ship;
 		setSize(10, 10);
