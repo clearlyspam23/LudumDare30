@@ -12,6 +12,7 @@ public class Mine extends Structure{
 	private int rate;
 	
 	public Mine(Resource resource, int rate, int increment){
+		super(0);
 		this.resource = resource;
 		this.rate = rate;
 		this.increment = increment;
@@ -48,6 +49,22 @@ public class Mine extends Structure{
 
 	public void setIncrement(int increment) {
 		this.increment = increment;
+	}
+
+	@Override
+	public Structure copy() {
+		return new Mine(resource, rate, increment);
+	}
+	
+	public boolean equals(Object other){
+		if(!(other instanceof Mine))
+			return false;
+		Mine m = (Mine) other;
+		return m.resource.equals(resource);
+	}
+	
+	public int hashCode(){
+		return resource.hashCode();
 	}
 
 }

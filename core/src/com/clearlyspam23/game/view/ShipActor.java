@@ -19,8 +19,6 @@ public class ShipActor extends Group {
 	private Ship ship;
 	private GameData data;
 	private PooledEffect particles;
-	private float poffx;
-	private float poffy;
 	
 	public ShipActor(TextureRegion base, TextureRegion overlay, PooledEffect particles, float startX, float startY, float endX, float endY, Ship ship, GameData data){
 		this.base = base;
@@ -39,9 +37,6 @@ public class ShipActor extends Group {
 		double cos = Math.cos(Math.toRadians(angle));
 		double sin = Math.sin(Math.toRadians(angle));
 		this.setRotation((float) angle);
-		poffx = (float)(pOffX*cos - pOffY*sin);
-		poffy = (float)(pOffX*sin + pOffY*cos);
-		System.out.println(poffx + ", " + poffy);
 		for (int i = 0; i < particles.getEmitters().size; i++) { //get the list of emitters - things that emit particles
             particles.getEmitters().get(i).getAngle().setLow((float) angle-90); //low is the minimum rotation
             particles.getEmitters().get(i).getAngle().setHigh((float) angle-90); //high is the max rotation

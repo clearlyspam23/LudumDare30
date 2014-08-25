@@ -39,6 +39,17 @@ public class PlanetGrid {
 		planets.add(planet);
 	}
 	
+	public List<Planet> getConnectedPlanets(Planet planet){
+		List<Planet> output = new ArrayList<Planet>();
+		if(!grid.containsKey(planet))
+			return output;
+		PlanetNode node = grid.get(planet);
+		for(Edge e : grid.get(planet).connections){
+			output.add(e.getOther(node).planet);
+		}
+		return output;
+	}
+	
 	public List<Planet> planetsBetween(Planet start, Planet end){
 		if(!grid.containsKey(start)||!grid.containsKey(end))
 			return new LinkedList<Planet>();
@@ -71,6 +82,18 @@ public class PlanetGrid {
 		}
 		visited.remove(start);
 		return null;
+	}
+	
+	public int getDistanceToNeighbor(Planet start, Planet end){
+		if(!grid.containsKey(start)||!grid.containsKey(end))
+			return -1;
+		PlanetNode sNode = grid.get(start);
+		for(Edge e : sNode.connections){
+			PlanetNode other = e.getOther(sNode);
+			if(other.planet.equals(end))
+				return e.distance;
+		}
+		return -1;
 	}
 
 	public int getDistanceToPlanet(Planet start, Planet end){

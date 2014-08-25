@@ -20,7 +20,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.clearlyspam23.game.LD30SpaceGame;
 import com.clearlyspam23.game.model.GameData;
 import com.clearlyspam23.game.model.GameEventListener;
 import com.clearlyspam23.game.model.Planet;
@@ -50,9 +52,7 @@ public class GameStage extends Stage implements GameEventListener{
 	private boolean dragging = false;
 	
 	private OverlayStage overlay;
-	
-//	private Texture simpleShip;
-//	private TextureRegion simpleShipRegion;
+	private StarsStage stars;
 	
 	private Texture planet;
 	private TextureRegion planetRegion;
@@ -64,9 +64,10 @@ public class GameStage extends Stage implements GameEventListener{
 	
 	private float scaleRate = 30;
 
-	public GameStage(Viewport viewport, GameData data) {
+	public GameStage(Viewport viewport, GameData data, LD30SpaceGame ld30SpaceGame) {
 		super(viewport);
-		overlay = new OverlayStage();
+		overlay = new OverlayStage(ld30SpaceGame);
+		stars = new StarsStage(new ScreenViewport(), ld30SpaceGame.starsDrawable);
 		System.out.println(getCamera().viewportWidth + ", " + getCamera().viewportHeight);
 		maximumScale = new Vector2(getCamera().viewportWidth*2, getCamera().viewportHeight*2);
 		minimumScale = new Vector2(getCamera().viewportWidth*0.5f, getCamera().viewportHeight*0.5f);
@@ -91,8 +92,7 @@ public class GameStage extends Stage implements GameEventListener{
 //		}
 //		addActor(new ParticleEffectActor(flameEffectPool.obtain()));
 		
-//		simpleShip = new Texture("art/SpaceShipCombined.png");
-//		simpleShipRegion = new TextureRegion(simpleShip);
+		
 //		viewport.getCamera().position.set(-50, -50, 0);
 	}
 	
@@ -103,14 +103,16 @@ public class GameStage extends Stage implements GameEventListener{
 			data.doTick();
 			sinceLastTick-=TICK_RATE;
 		}
+		stars.act();
 		overlay.act(delta);
 		super.act(delta);
 	}
 	
 	@Override
 	public void draw(){
-		overlay.draw();
+		stars.draw();
 		super.draw();
+		overlay.draw();
 	}
 
 	@Override
@@ -119,8 +121,13 @@ public class GameStage extends Stage implements GameEventListener{
 //		System.out.println(startActor.getX());
 //		System.out.println(startActor.getY());
 		Actor endActor = actorMap.get(ship.getNextVisit());
-		ShipActor shipActor = new ShipActor(shipBase, shipOverlay, flameEffectPool.obtain(), startActor.getOriginX(), startActor.getOriginY(), 
-				endActor.getOriginX(), endActor.getOriginY(), ship, data);
+		Vector2 towards = new Vector2(endActor.getOriginX(), endActor.getOriginY());
+		towards.sub(startActor.getOriginX(), startActor.getOriginY()).nor();
+		Vector2 otherTowards = new Vector2(towards);
+		towards.scl(startActor.getWidth()*0.6f);
+		otherTowards.scl(endActor.getWidth()*0.6f);
+		ShipActor shipActor = new ShipActor(shipBase, shipOverlay, flameEffectPool.obtain(), startActor.getOriginX()+towards.x, startActor.getOriginY()+towards.y, 
+				endActor.getOriginX()-otherTowards.x, endActor.getOriginY()-otherTowards.y, ship, data);
 		shipGroup.addActor(shipActor);
 	}
 
@@ -141,7 +148,6 @@ public class GameStage extends Stage implements GameEventListener{
 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				System.out.println("here");
 				overlay.showPlanetOverlay(planet);
 				return true;
 			}
@@ -161,7 +167,7 @@ public class GameStage extends Stage implements GameEventListener{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
 		if(overlay.touchDown(screenX, screenY, pointer, button)){
-			System.out.println("happened");
+			didDrag = true;
 			return true;
 		}
 		
@@ -180,6 +186,7 @@ public class GameStage extends Stage implements GameEventListener{
 	}
 	
 	public boolean touchUp(int screenX, int screenY, int pointer, int button){
+		overlay.touchUp(screenX, screenY, pointer, button);
 		if(!didDrag)
 			overlay.hideActiveOverlay();
 		didDrag = false;

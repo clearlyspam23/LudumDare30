@@ -1,29 +1,29 @@
 package com.clearlyspam23.game.view;
 
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
-public abstract class SideOverlay extends Group {
+public abstract class SideOverlay extends Table {
 	
 	private boolean showing;
 	
-	private Image background;
+//	private Image background;
 	
 	public SideOverlay(NinePatch ninePatch){
-		background = new Image();
-		background.setDrawable(new NinePatchDrawable(ninePatch));
-		addActor(background);
+		this.setBackground(new NinePatchDrawable(ninePatch));
+//		background = new Image();
+//		background.setDrawable(new NinePatchDrawable(ninePatch));
+//		addActor(background);
 	}
 	
-	@Override
-	public void setSize(float width, float height){
-		super.setSize(width, height);
-		background.setSize(width, height);
-	}
+//	@Override
+//	public void setSize(float width, float height){
+//		super.setSize(width, height);
+//		background.setSize(width, height);
+//	}
 	
 	protected void setStage(Stage stage){
 		super.setStage(stage);
@@ -46,9 +46,9 @@ public abstract class SideOverlay extends Group {
 		showing = false;
 	}
 	
-	public void onResize(float nWidth, float nHeight){
-		
-	}
+//	public void onResize(float nWidth, float nHeight){
+//		
+//	}
 	
 	public boolean isShowing(){
 		return showing;
@@ -56,8 +56,8 @@ public abstract class SideOverlay extends Group {
 	
 	public abstract void onUpdate();
 
-	public Image getBackground() {
-		return background;
-	}
+//	public Image getBackground() {
+//		return background;
+//	}
 
 }

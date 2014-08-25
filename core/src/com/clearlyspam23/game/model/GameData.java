@@ -79,6 +79,7 @@ public class GameData {
 	
 	public void addPlanet(Planet planet){
 		planets.addPlanet(planet);
+		planet.setPlanetGrid(planets);
 //		for(GameEventListener l : listeners)
 //			l.onPlanetAdd(planet, this);
 	}

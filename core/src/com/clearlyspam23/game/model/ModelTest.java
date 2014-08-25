@@ -3,6 +3,7 @@ package com.clearlyspam23.game.model;
 import com.clearlyspam23.game.model.Resource.ResourceType;
 import com.clearlyspam23.game.model.logging.ConsoleLogger;
 import com.clearlyspam23.game.model.structures.Mine;
+import com.clearlyspam23.game.model.structures.BaseRefinery;
 import com.clearlyspam23.game.model.structures.Refinery;
 import com.clearlyspam23.game.model.structures.SpacePort;
 

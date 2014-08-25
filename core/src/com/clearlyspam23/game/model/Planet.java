@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.clearlyspam23.game.model.structures.SpacePort;
 
@@ -24,6 +25,8 @@ public class Planet {
 	private List<TradeAgreement> activeTrades = new ArrayList<TradeAgreement>();
 	
 	private SpacePort spacePort;
+	
+	private PlanetGrid planetGrid;
 	
 	public Planet(String name, ValueTable table, float buying, float selling, SpacePort port){
 		this.name = name;
@@ -124,6 +127,14 @@ public class Planet {
 	public List<TradeAgreement> getActiveTrades() {
 		return activeTrades;
 	}
+	
+	public boolean isResourceBeingTradedTo(Resource resource, Planet planet){
+		for(TradeAgreement a : activeTrades){
+			if(a.planet.equals(planet)&&a.resource.equals(resource))
+				return true;
+		}
+		return false;
+	}
 
 	public void addTradeAgreement(TradeAgreement agreement) {
 		activeTrades.add(agreement);
@@ -135,6 +146,40 @@ public class Planet {
 	
 	public SpacePort getSpacePort(){
 		return spacePort;
+	}
+	
+	public List<Resource> getAvailableResources(){
+		List<Resource> output = new ArrayList<Resource>();
+		for(Entry<Resource, Integer> e : availableResources.entrySet()){
+			if(e.getValue()>0)
+				output.add(e.getKey());
+		}
+		return output;
+	}
+	
+	public List<Resource> getNonTradedResource(Planet other){
+		List<Resource> output = new ArrayList<Resource>();
+		for(Entry<Resource, Integer> e : availableResources.entrySet()){
+			if(e.getValue()>0&&!isResourceBeingTradedTo(e.getKey(), other))
+				output.add(e.getKey());
+		}
+		return output;
+	}
+
+	public PlanetGrid getPlanetGrid() {
+		return planetGrid;
+	}
+
+	public void setPlanetGrid(PlanetGrid myGrid) {
+		this.planetGrid = myGrid;
+	}
+	
+	public List<Planet> getNeighboringPlanets(){
+		return planetGrid.getConnectedPlanets(this);
+	}
+	
+	public int distanceToPlanet(Planet neighbor){
+		return planetGrid.getDistanceToNeighbor(this, neighbor);
 	}
 
 }
